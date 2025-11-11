@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register - Shopora</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet" />
+  <style>
+    .form-card {
+      max-width: 480px;
+      width: 100%;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-right: 120px;
+    }
+
+.form-row {
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  
+}
+
+    .form-row input {
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+
+    .form-card button {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+    .form-card button:hover {
+      background-color: #555;
+    }
+
+    .form-card .login-link {
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .form-card .login-link a {
+      color: #333;
+      text-decoration: underline;
+    }
+    .login-link {
+  font-size: 1.5rem; 
+  text-align: center;
+
+  font-family: "Jockey One", sans-serif;
+  color: #222;
+  
+}
+
+.login-link a {
+  color: #2d1a00;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  color: #4b2e00;
+}
+
+    #message {
+      text-align: center;
+      font-weight: bold;
+      font: 1em sans-serif;
+    }
+  label{
+    font-weight: bold;
+    margin-right: 20px;
+    font-size: 20px;
+  }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="flex-container">
+    <div class="logo">
+      <img src="images/logo.png" alt="Shopora Logo" />
+      <span class="logo-text">Shopora</span>
+    </div>
+    <div class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="orders.html">Orders</a>
+      <a href="login.html">Login</a>
+      <a href="register.html" class="active">Register</a>
+    </div>
+  </div>
+
+  <div class="product-flex" style="justify-content: center; align-items: center;">
+    <div class="form-card">
+      <h2 class="section-heading">Create Your Shopora Account</h2>
+      <hr class="section-divider" />
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" placeholder="Full Name" required />
+        <br>
+        <label for="name">Email:</label>
+          <input type="email" id="email" placeholder="Email Address" required />
+        <br>
+        <label for="password">Password:</label>
+          <input type="password" id="password" placeholder="Password" required minlength="6" />
+          <br>
+          <label for="cpassword">Confirm Password:</label>
+          <input type="cpassword" id="confirmPassword" placeholder="Confirm Password" required />
+          <br>
+        </div>
+        <p id="message"></p>
+        <button type="submit">Register</button>
+      </form>
+      <div class="login-link">
+        Already registered? <a href="login.html">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Shopora. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const message = document.getElementById("message");
+
+      message.textContent = "";
+      message.style.color = "";
+
+      if (!name || !email || !password || !confirmPassword) {
+        message.textContent = "Please fill in all fields.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (!/^[a-zA-Z ]+$/.test(name)) {
+        message.textContent = "Name should only contain letters and spaces.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        message.textContent = "Invalid email format.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (password.length < 6) {
+        message.textContent = "Password must be at least 6 characters.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        message.textContent = "Passwords do not match.";
+        message.style.color = "red";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const alreadyExists = users.some(user => user.email === email);
+
+      if (alreadyExists) {
+        message.textContent = "This email is already registered. Please log in.";
+        message.style.color = "red";
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      message.textContent = "Registration successful!";
+      message.style.color = "green";
+      document.getElementById("registerForm").reset();
+    });
+  </script>
+</body>
+</html>
